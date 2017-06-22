@@ -24,8 +24,11 @@ export class TasksComponent implements OnInit {
     this.authService.getTask()
     .subscribe(
       (tasks: Task[]) =>this.tasks = tasks,
-      (error: Response) => console.log(error)
-      
+      (error: Response) => {
+      this.flashMessage.show('You have to login to view tasks', { cssClass: 'alert-danger', timeout: 3000 });
+      this.router.navigate(['/login']);
+      }
+
     );
   }
 

@@ -50,8 +50,10 @@ export class AuthService {
 
   getTask(){
     let headers = new Headers
+    this.loadToken();
     headers.append('Content-Type','application/json');
-    return this.http.get('api/tasks',{headers: headers})
+    headers.append('Authorization',this.authToken);
+    return this.http.get('api/tasks?token='+ this.authToken,{headers: headers})
     .map(res => res.json().tasks);
   }
 
@@ -72,9 +74,11 @@ export class AuthService {
 
   addTask(content: string){
     let headers = new Headers();
+    this.loadToken();
     const body = JSON.stringify({content: content});
+    headers.append('Authorization',this.authToken);
     headers.append('Content-Type','application/json');
-    return this.http.post('api/addtask',body,{headers: headers}).
+    return this.http.post('api/addtask?token='+ this.authToken,body,{headers: headers}).
     map(res => res.json());
   }
 
