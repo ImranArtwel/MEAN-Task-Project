@@ -1,1 +1,1 @@
-VENoM Project
+This is a Mongo Express Angular2 Nodejs (MEAN) stack project. In this project, a user registers and logs in. The user can add task and view task. Within the view task page, user can edit and delete a task. Finally user can logout.
