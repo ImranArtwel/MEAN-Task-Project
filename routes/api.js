@@ -71,7 +71,7 @@ router.post('/authenticate', (req, res, next) => {
 
 
 //add task router
-router.post('/addtask',(req,res,next) => {
+router.post('/addtask',passport.authenticate('jwt',{session: false}),(req,res,next) => {
     var newTask = new Task({
         content: req.body.content
     });
@@ -113,7 +113,7 @@ router.put('/task/:id', (req,res,next) => {
 });
 
 //get task
-router.get('/tasks', (req,res,next) => {
+router.get('/tasks',passport.authenticate('jwt',{session: false}), (req,res,next) => {
 
     Task.find({},function (err,docs) {
         if(err)

@@ -14,7 +14,7 @@ export class AuthService {
   registerUser(user){
     let headers = new Headers();
     headers.append('Content-Type','application/json');
-    return this.http.post('api/register',user,{headers: headers})
+    return this.http.post('http://localhost:5000/api/register',user,{headers: headers})
     .map(res => res.json());
 
   }
@@ -22,7 +22,7 @@ export class AuthService {
   authenticateUser(user){
     let headers = new Headers();
     headers.append('Content-Type','application/json');
-    return this.http.post('api/authenticate',user,{headers: headers})
+    return this.http.post('http://localhost:5000/api/authenticate',user,{headers: headers})
     .map(res => res.json());
   }
 
@@ -49,9 +49,11 @@ export class AuthService {
   }
 
   getTask(){
-    let headers = new Headers
+    let headers = new Headers();
+    this.loadToken();
     headers.append('Content-Type','application/json');
-    return this.http.get('api/tasks',{headers: headers})
+    headers.append('Authorization',this.authToken);
+    return this.http.get('http://localhost:5000/api/tasks?token=' +this.authToken,{headers: headers})
     .map(res => res.json().tasks);
   }
 
@@ -59,22 +61,24 @@ export class AuthService {
     let headers = new Headers();
     const body = JSON.stringify({content: newTask});
     headers.append('Content-Type','application/json');
-    return this.http.put('api/task/'+ id,body,{headers: headers}).
+    return this.http.put('http://localhost:5000/api/task/'+ id,body,{headers: headers}).
     map(res => res.json());
 
   }
 
   deleteTask(id: number){
-    return this.http.delete('api/task/'+ id)
+    return this.http.delete('http://localhost:5000/api/task/'+ id)
     .map(res => res.json());
 
   }
 
   addTask(content: string){
     let headers = new Headers();
-    const body = JSON.stringify({content: content});
+    this.loadToken();
     headers.append('Content-Type','application/json');
-    return this.http.post('api/addtask',body,{headers: headers}).
+    headers.append('Authorization',this.authToken);
+    const body = JSON.stringify({content: content});
+    return this.http.post('http://localhost:5000/api/addtask?token=' +this.authToken,body,{headers: headers}).
     map(res => res.json());
   }
 

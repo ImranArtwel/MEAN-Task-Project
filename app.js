@@ -28,8 +28,8 @@ const app = express();
 const api = require('./routes/api');
 
 //server listening port
-const port = process.env.PORT || 8080;
-//const port = 5000;
+//const port = process.env.PORT || 8080;
+const port = 5000;
 
 //some middleware
 app.use(cors()); // allow request from any domain
@@ -50,7 +50,7 @@ app.use('/api',api);
 
 //Index Route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
+  //res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 // app.get('*', (req, res) => {
