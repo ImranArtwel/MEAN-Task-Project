@@ -1,0 +1,8 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+   <div class="form-group">
+     <label>Task Content</label>
+     <textarea rows ="3" cols="50" name="content" ngModel></textarea>
+     <!--<input type="text" name="content" ngModel> -->
+   </div>
+   <button class="btn btn-primary" type="submit">Submit</button>
+</form>

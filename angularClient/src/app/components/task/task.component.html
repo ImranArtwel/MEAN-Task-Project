@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    {{task.content}}
+  </div>
+  <div class="panel-footer">
+    <div *ngIf="allowEdit">
+      <input type="text" [(ngModel)]="editValue">
+      <a href="#" (click)="onUpdate()">Save</a>
+      <a href="#" (click)="onCancel()">Cancel</a>
+    </div>
+
+    <div *ngIf="!allowEdit">
+      <a href="#" (click)="onEdit()">Edit</a>
+      <a href="#" (click)="onDelete()">Delete</a>
+    </div>
+  </div>
+</div>
