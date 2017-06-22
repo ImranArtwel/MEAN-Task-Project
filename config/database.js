@@ -3,6 +3,6 @@
  */
 
 module.exports = {
-   database: 'mongodb://localhost:27017/tasks',
+   database: 'mongodb://imran:imran@ds135532.mlab.com:35532/meanproject',
    secret: 'secret'
 }
