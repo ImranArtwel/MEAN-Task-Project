@@ -23,7 +23,6 @@ mongoose.connection.on('connected', function () {
 const app = express();
 
 //cors enable all requests
-app.use(cors());
 
 //user route
 const api = require('./routes/api');
@@ -50,9 +49,13 @@ require('./config/passport')(passport);
 app.use('/api',api);
 
 //Index Route
-app.get('/', function (req, res) {
-    res.send("Imran Artwel Jnr");
-})
+app.get('/', (req, res) => {
+  res.send('Invalid Endpoint');
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
 
 app.listen(port, function () {
