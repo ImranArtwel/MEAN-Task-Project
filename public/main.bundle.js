@@ -491,6 +491,7 @@ module.exports = "<form #f=\"ngForm\" (ngSubmit)=\"onSubmit(f)\">\r\n   <div cla
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__ = __webpack_require__("../../../../angular2-flash-messages/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NewTaskComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -504,10 +505,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var NewTaskComponent = (function () {
-    function NewTaskComponent(authService, flashMessage) {
+    function NewTaskComponent(authService, flashMessage, router) {
         this.authService = authService;
         this.flashMessage = flashMessage;
+        this.router = router;
     }
     NewTaskComponent.prototype.ngOnInit = function () {
     };
@@ -520,6 +523,9 @@ var NewTaskComponent = (function () {
             }
             else
                 _this.flashMessage.show('Error while adding task', { cssClass: 'alert-danger', timeout: 3000 });
+        }, function (error) {
+            _this.flashMessage.show('You have to login to add new tasks', { cssClass: 'alert-danger', timeout: 3000 });
+            _this.router.navigate(['/login']);
         });
         form.reset();
     };
@@ -531,10 +537,10 @@ NewTaskComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/components/new-task/new-task.component.html"),
         styles: [__webpack_require__("../../../../../src/app/components/new-task/new-task.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__["FlashMessagesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__["FlashMessagesService"]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__["FlashMessagesService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angular2_flash_messages__["FlashMessagesService"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]) === "function" && _c || Object])
 ], NewTaskComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=new-task.component.js.map
 
 /***/ }),
@@ -808,7 +814,10 @@ var TasksComponent = (function () {
     TasksComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.authService.getTask()
-            .subscribe(function (tasks) { return _this.tasks = tasks; }, function (error) { return console.log(error); });
+            .subscribe(function (tasks) { return _this.tasks = tasks; }, function (error) {
+            _this.flashMessage.show('You have to login to view tasks', { cssClass: 'alert-danger', timeout: 3000 });
+            _this.router.navigate(['/login']);
+        });
     };
     return TasksComponent;
 }());
@@ -886,8 +895,10 @@ var AuthService = (function () {
     };
     AuthService.prototype.getTask = function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"];
+        this.loadToken();
         headers.append('Content-Type', 'application/json');
-        return this.http.get('api/tasks', { headers: headers })
+        headers.append('Authorization', this.authToken);
+        return this.http.get('api/tasks?token=' + this.authToken, { headers: headers })
             .map(function (res) { return res.json().tasks; });
     };
     AuthService.prototype.updateTask = function (id, newTask) {
@@ -903,9 +914,11 @@ var AuthService = (function () {
     };
     AuthService.prototype.addTask = function (content) {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]();
+        this.loadToken();
         var body = JSON.stringify({ content: content });
+        headers.append('Authorization', this.authToken);
         headers.append('Content-Type', 'application/json');
-        return this.http.post('api/addtask', body, { headers: headers }).
+        return this.http.post('api/addtask?token=' + this.authToken, body, { headers: headers }).
             map(function (res) { return res.json(); });
     };
     return AuthService;
