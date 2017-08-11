@@ -53,8 +53,7 @@ Check out to the production repo:
 $ git checkout master
 ```
 
-The production app is deployed to heroku:
-[MEAN PROJECT](https://artweljunior.herokuapp.com)
+
 
 
 
